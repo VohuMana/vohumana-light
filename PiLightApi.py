@@ -18,6 +18,10 @@ breathingParser.add_argument('b', type = int, required = True, location = 'args'
 breathingParser.add_argument('min', type = float, required = True, location = 'args')
 breathingParser.add_argument('max', type = float, required = True, location = 'args')
 
+alarmParser = reqparse.RequestParser()
+alarmParser.add_argument('hour', type = int, required = True, location = 'args')
+alarmParser.add_argument('min', type = int, required = True, location = 'args')
+
 # Spawns flask on it's own thread
 class ThreadedFlask(object):
 	def __init__(self, f):
@@ -100,11 +104,6 @@ def turnOff():
 	led.update()
 	return "Light off"
 
-# Starts the web server
-if __name__ == "__main__":
-    tf.Go()
-    GTC.InitThread()
-
 # Add Sunrise time running on own thread to notify about time
 @app.route("/sunrise")
 def enableSunrise():
@@ -112,6 +111,20 @@ def enableSunrise():
 	anim = SunriseAnim(led, times)
 	GTC.KickOffAnimation(anim)
 	return times.sunrise.isoformat()
+
+# Use the same sunrise code as an alarm
+@app.route("/alarm")
+def enableAlarm():
+	args = alarmParser.parse_args()
+	times = SunTimes()
+	times.sunrise = datetime.time(args['hour'], args['min'])
+	times.sunset = datetime.time(sunSetHour, sunSetMinute)
+	anim = SunriseAnim(led, times)
+
+# Starts the web server
+if __name__ == "__main__":
+    tf.Go()
+    GTC.InitThread()
 
 # Add RainbowCycle
 # Add chasing light
