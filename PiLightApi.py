@@ -118,8 +118,9 @@ def enableAlarm():
 	args = alarmParser.parse_args()
 	times = SunTimes()
 	times.sunrise = datetime.time(args['hour'], args['min'])
-	times.sunset = datetime.time(sunSetHour, sunSetMinute)
+	times.sunset = datetime.datetime.now().time()
 	anim = SunriseAnim(led, times)
+	return "Alarm set for " + times.sunrise.isoformat()
 
 # Starts the web server
 if __name__ == "__main__":
