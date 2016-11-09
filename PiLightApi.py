@@ -117,9 +117,13 @@ def enableSunrise():
 def enableAlarm():
 	args = alarmParser.parse_args()
 	times = SunTimes()
-	times.sunrise = datetime.time(args['hour'], args['min'])
+	times.sunrise = datetime.datetime.now()
+	times.sunrise = times.sunrise.replace(hour = args['hour'], minute = args['min'], second = 0, microsecond = 0)
+	if times.sunrise < datetime.datetime.now():
+		times.sunrise = times.sunrise + datetime.timedelta(days = 1)
 	times.sunset = datetime.datetime.now().time()
 	anim = SunriseAnim(led, times)
+	GTC.KickOffAnimation(anim)
 	return "Alarm set for " + times.sunrise.isoformat()
 
 # Starts the web server
