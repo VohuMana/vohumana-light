@@ -247,7 +247,7 @@ class SunriseAnim(BaseAnimationClass):
 		self.sunriseTime = sunriseTime
 		self.lightTime = sunriseTime.sunrise + datetime.timedelta(minutes = -10)
 		print(self.lightTime)
-		self.endTIme = sunriseTime.sunrise + datetime.timedelta(hours = 1)
+		self.endTime = sunriseTime.sunrise + datetime.timedelta(hours = 1)
 
 	def InterpolateOverTime(self, led,color1, color2, seconds, killEvent):
 			tempColor = Color(0,0,0)
@@ -282,7 +282,7 @@ class SunriseAnim(BaseAnimationClass):
 		minutesToStayLit = 60
 		sunColor = Color(255,210,80)
 		maxColor = Color(255,255,255)
-		if self.lightTime <= datetime.datetime.now():
+		if self.lightTime <= datetime.datetime.now() and self.endTime >= datetime.datetime.now():
 			print("Kicking off animation")
 			self.InterpolateOverTime(self.led, Color(0,0,0), sunColor, minutesToFadeIn * 60, killEvent)
 			self.InterpolateOverTime(self.led, sunColor, maxColor, minutesToStayLit * 60, killEvent)
