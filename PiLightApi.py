@@ -126,6 +126,12 @@ def enableAlarm():
 	GTC.KickOffAnimation(anim)
 	return "Alarm set for " + times.sunrise.isoformat()
 
+@app.route("/rainbow")
+def rainbow():
+	anim = RainbowSpiral(led, 94)
+	GTC.KickOffAnimation(anim)
+	return "Rainbow wheel!"
+
 # Starts the web server
 if __name__ == "__main__":
     tf.Go()

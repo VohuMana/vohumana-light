@@ -295,3 +295,26 @@ class SunriseAnim(BaseAnimationClass):
 		while not killEvent.isSet():
 			self.step(killEvent)
 			self.led.update()
+
+# Creates a rainbow where each led is a different color
+class RainbowSpiral(BaseAnimationClass):
+	def __init__(self, led, numLeds):
+		self.led = led
+		self.ledCount = numLeds
+		self.offset = 0
+
+	def animate(self, killEvent):
+		self.led.fill(Color(0,0,0))
+		self.led.update()
+		while not killEvent.isSet():
+			self.step(killEvent)
+			self.led.update()
+
+	def step(self, killEvent):
+		stepAmount = 360 // self.ledCount
+		startAngle = self.offset * stepAmount
+		for i in range(self.ledCount):
+			angle = (startAngle + (i * stepAmount)) % 360 
+			color = ColorHSV(angle, 1.0, 1.0).get_color_rgb()
+			self.led.set(i, color)
+		self.offset = self.offset + 1	
